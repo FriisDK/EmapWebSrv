@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Database Name="EMAP" EntityNamespace="EMAPContext" ContextNamespace="EMAPContext" Class="EMAPDataContext" xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" ed:Guid="70e5ee9c-be2d-474c-8187-045f040ccd92" Provider="Devart.Data.Oracle.Linq.Provider.OracleDataProvider, Devart.Data.Oracle.Linq" Extended="true" xmlns="http://schemas.devart.com/linqconnect/mapping">
+  <Connection Mode="ConnectionString" ConnectionString="User Id=emap;Password=efj7185;Server=localhost;Direct=True;Service Name=orcl;Port=10521;Persist Security Info=True" Provider="Devart.Data.Oracle" />
+  <Table Name="EMAP.LICENSER" Member="LICENSERs">
+    <Type Name="LICENSER" ed:Guid="c58be1a8-95f0-467b-b0ed-ddc71d75efd2">
+      <Column Name="PRG_ID" Member="PRGID" Type="System.String" DbType="VARCHAR2(200 CHAR) NOT NULL" IsPrimaryKey="true" CanBeNull="false" UpdateCheck="Always" MaxLength="200" ed:ValidateMaxLength="200" ed:ValidateRequired="true" ed:Guid="152ef135-b1c7-45f1-8ff0-810a851bc34e" />
+      <Column Name="CPU_ID_1" Member="CPUID1" Type="System.String" DbType="VARCHAR2(200 CHAR) NULL" CanBeNull="true" UpdateCheck="Never" MaxLength="200" ed:ValidateMaxLength="200" ed:ValidateRequired="false" ed:Guid="b6726df8-922a-4d6c-bc20-21cf27dafe49" />
+      <Column Name="CPU_ID_2" Member="CPUID2" Type="System.String" DbType="VARCHAR2(200 CHAR) NULL" CanBeNull="true" UpdateCheck="Never" MaxLength="200" ed:ValidateMaxLength="200" ed:ValidateRequired="false" ed:Guid="b4bfe280-521f-4c5c-8917-4336b88bb0e8" />
+      <Column Name="CPU_ID_3" Member="CPUID3" Type="System.String" DbType="VARCHAR2(200 CHAR) NULL" CanBeNull="true" UpdateCheck="Never" MaxLength="200" ed:ValidateMaxLength="200" ed:ValidateRequired="false" ed:Guid="24b2e67e-a147-4f3c-8bc8-fbba2366728d" />
+      <Column Name="CUST_NAME" Member="CUSTNAME" Type="System.String" DbType="VARCHAR2(50 CHAR) NULL" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="650f02cb-fdb4-4d76-b327-486ff6b0331a" />
+      <Column Name="CUST_ADD" Member="CUSTADD" Type="System.String" DbType="VARCHAR2(50 CHAR) NULL" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="4bffbd82-1a24-4370-884b-e478aa56266f" />
+      <Column Name="CUST_ADD_1" Member="CUSTADD1" Type="System.String" DbType="VARCHAR2(50 CHAR) NULL" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="b2ab732c-d75d-4f37-b3b6-e68c67d35819" />
+      <Column Name="CUST_ZIP" Member="CUSTZIP" Type="System.String" DbType="VARCHAR2(50 CHAR) NULL" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="7f43da05-88a6-4d1e-b264-8468f20a2292" />
+      <Column Name="CUST_CITY" Member="CUSTCITY" Type="System.String" DbType="VARCHAR2(50 CHAR) NULL" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="bf5f39b5-1c45-4ac8-9172-78190a5a11ae" />
+      <Column Name="CUST_COUNTRY" Member="CUSTCOUNTRY" Type="System.String" DbType="VARCHAR2(50 CHAR) NULL" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="a7f08dbf-0203-413b-b102-664703cfb215" />
+      <Column Name="CUST_EMAIL" Member="CUSTEMAIL" Type="System.String" DbType="VARCHAR2(100 CHAR) NULL" CanBeNull="true" UpdateCheck="Never" MaxLength="100" ed:ValidateMaxLength="100" ed:ValidateRequired="false" ed:Guid="d9c17d81-d0c1-4e3e-b660-dbb449039d43" />
+      <Column Name="GENREG" Type="System.String" DbType="VARCHAR2(1 CHAR) NULL" CanBeNull="true" UpdateCheck="Never" MaxLength="1" ed:ValidateMaxLength="1" ed:ValidateRequired="false" ed:Guid="544a4eef-6e1a-47e2-8174-133e03669328" />
+    </Type>
+  </Table>
+  <Table Name="EMAP.LYRIC" Member="LYRICs">
+    <Type Name="LYRIC" ed:Guid="7b7f99c5-dc0f-43d1-a101-369a63462ffd">
+      <Column Name="UNIQUE_ID" Member="UNIQUEID" Type="System.Decimal" DbType="NUMBER NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="fafe428a-1afe-4c0a-8cb9-eefe8d812010" />
+      <Column Name="TITLE" Type="System.String" DbType="VARCHAR2(1000 CHAR) NULL" CanBeNull="true" UpdateCheck="Never" MaxLength="1000" ed:ValidateMaxLength="1000" ed:ValidateRequired="false" ed:Guid="8e55d6f9-701a-4eba-bcd9-7829c7389053" />
+      <Column Name="LYRIC" Member="LYRIC1" Type="System.String" DbType="CLOB NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="844d5fb6-6d54-41e2-86e3-d42a0839f636" />
+    </Type>
+  </Table>
+</Database>
