@@ -19,5 +19,24 @@ namespace EmapServer.Controllers
             resp.LicenseResponse = resp.Licenses == null ? "NOTFOUND" : "FOUND";
             return Ok(resp);
         }
+
+        public IActionResult AddComputerFromId(string programid, string computerId)
+        {
+            var resp = new GetLicenseFromPrgIdResponse();
+            var emapContext = new EMAPDataContext(DatabaseGlobalization.GetConnection().ConnectionString);
+            resp.Licenses = emapContext.LICENSERs.SingleOrDefault(x => x.PRGID == programid);
+            resp.LicenseResponse = resp.Licenses == null ? "NOTFOUND" : "FOUND";
+
+            if (resp.Licenses != null)
+            {
+                if (string.IsNullOrEmpty(resp.Licenses.CPUID1))
+                    resp.Licenses.CPUID1 = computerId;
+                else if (string.IsNullOrEmpty(resp.Licenses.CPUID2))
+                    resp.Licenses.CPUID2 = computerId;
+                else if (string.IsNullOrEmpty(resp.Licenses.CPUID3))
+                    resp.Licenses.CPUID3 = computerId;
+            }
+            return Ok(resp);
+        }
     }
 }
