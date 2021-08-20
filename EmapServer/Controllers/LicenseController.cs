@@ -39,6 +39,7 @@ namespace EmapServer.Controllers
             }
         }
 
+        /*
         [HttpGet("AddComputerFromId")]
         public IActionResult AddComputerFromId(string programid, string computerId)
         {
@@ -68,5 +69,6 @@ namespace EmapServer.Controllers
                 throw;
             }
         }
+        */
     }
 }
