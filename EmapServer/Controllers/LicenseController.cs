@@ -39,7 +39,7 @@ namespace EmapServer.Controllers
             }
         }
 
-        /*
+        
         [HttpGet("AddComputerFromId")]
         public IActionResult AddComputerFromId(string programid, string computerId)
         {
@@ -59,7 +59,14 @@ namespace EmapServer.Controllers
                         resp.Licenses.CPUID2 = computerId;
                     else if (string.IsNullOrEmpty(resp.Licenses.CPUID3))
                         resp.Licenses.CPUID3 = computerId;
+
+
+                    Logger.LogInformation($"Set license: {programid} {computerId}");
+
+                    emapContext.SubmitChanges();
                 }
+
+                
 
                 return Ok(resp);
             }
@@ -69,6 +76,6 @@ namespace EmapServer.Controllers
                 throw;
             }
         }
-        */
+        
     }
 }
