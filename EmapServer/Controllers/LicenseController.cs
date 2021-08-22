@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using EMAPContext;
 using EmapModel;
@@ -21,15 +25,23 @@ namespace EmapServer.Controllers
         }
 
         [HttpGet("GetLicenseFromPrgId")]
-        public IActionResult GetLicenseFromPrgId(string programid)
+        public IActionResult GetLicenseFromPrgId()
         {
+            var programId = Request.Query["programid"].FirstOrDefault();
+            var computerId = Request.Query["computerid"].FirstOrDefault();
+            var resp = new GetLicenseFromPrgIdResponse { LicenseResponse = LicenseResponse.LicenseNotFound };
+
             try
             {
-                Logger.LogInformation($"GetLicenseFromPrgId called with id: {programid}");
-                var resp = new GetLicenseFromPrgIdResponse();
-                var emapContext = new EMAPDataContext(DatabaseGlobalization.GetConnection().ConnectionString);
-                resp.Licenses = emapContext.LICENSERs.SingleOrDefault(x => x.PRGID == programid);
-                resp.LicenseResponse = resp.Licenses == null ? "NOTFOUND" : "FOUND";
+                Logger.LogInformation($"GetLicenseFromPrgId called with id: {programId} computer {computerId}");
+
+                if (!string.IsNullOrEmpty(programId) && !string.IsNullOrEmpty(computerId))
+                {
+                    var emapContext = new EMAPDataContext(DatabaseGlobalization.GetConnection().ConnectionString);
+                    var licens = emapContext.LICENSERs.SingleOrDefault(x => x.PRGID == programId);
+                    resp = new GetLicenseFromPrgIdResponse(licens, computerId);
+                }
+                
                 return Ok(resp);
             }
             catch (Exception e)
@@ -38,36 +50,38 @@ namespace EmapServer.Controllers
                 throw;
             }
         }
-
         
-        [HttpGet("AddComputerFromId")]
-        public IActionResult AddComputerFromId(string programid, string computerId)
+        [HttpPost("AddComputerFromId")]
+        public IActionResult AddComputerFromId()
         {
+            var programId = Request.Query["programid"].FirstOrDefault();
+            var computerId = Request.Query["computerid"].FirstOrDefault();
             try
             {
-                Logger.LogInformation($"AddComputerFromId called with id: {programid} {computerId}");
-                var resp = new GetLicenseFromPrgIdResponse();
-                var emapContext = new EMAPDataContext(DatabaseGlobalization.GetConnection().ConnectionString);
-                resp.Licenses = emapContext.LICENSERs.SingleOrDefault(x => x.PRGID == programid);
-                resp.LicenseResponse = resp.Licenses == null ? "NOTFOUND" : "FOUND";
+                Logger.LogInformation($"AddComputerFromId called with id: {programId} {computerId}");
+                var resp = new GetLicenseFromPrgIdResponse { LicenseResponse = LicenseResponse.LicenseNotFound };
 
-                if (resp.Licenses != null)
+                if (!string.IsNullOrEmpty(programId) && !string.IsNullOrEmpty(computerId))
                 {
-                    if (string.IsNullOrEmpty(resp.Licenses.CPUID1))
-                        resp.Licenses.CPUID1 = computerId;
-                    else if (string.IsNullOrEmpty(resp.Licenses.CPUID2))
-                        resp.Licenses.CPUID2 = computerId;
-                    else if (string.IsNullOrEmpty(resp.Licenses.CPUID3))
-                        resp.Licenses.CPUID3 = computerId;
+                    var emapContext = new EMAPDataContext(DatabaseGlobalization.GetConnection().ConnectionString);
+                    var license = emapContext.LICENSERs.SingleOrDefault(x => x.PRGID == programId);
 
+                    if (license != null)
+                    {
+                        if (string.IsNullOrEmpty(license.CPUID1))
+                            license.CPUID1 = computerId;
+                        else if (string.IsNullOrEmpty(license.CPUID2))
+                            license.CPUID2 = computerId;
+                        else if (string.IsNullOrEmpty(license.CPUID3))
+                            license.CPUID3 = computerId;
 
-                    Logger.LogInformation($"Set license: {programid} {computerId}");
+                        Logger.LogInformation($"Set license: {programId} {computerId}");
 
-                    emapContext.SubmitChanges();
+                        emapContext.SubmitChanges();
+                    }
+
+                    resp = new GetLicenseFromPrgIdResponse(license, computerId);
                 }
-
-                
-
                 return Ok(resp);
             }
             catch (Exception e)
@@ -76,6 +90,31 @@ namespace EmapServer.Controllers
                 throw;
             }
         }
-        
+
+        [HttpPost("UpdateCustomer")]
+        public IActionResult UpdateCustomer()   
+        {
+            var programId = Request.Query["programid"].FirstOrDefault();
+
+            try
+            {
+                Logger.LogInformation($"UpdateCustormer called with id: {programId}");
+                if (!string.IsNullOrEmpty(programId))
+                {
+                    var custerRequst = this.GetRequestBody<UpdateCustomerRequest>();
+                    var emapContext = new EMAPDataContext(DatabaseGlobalization.GetConnection().ConnectionString);
+                    var license = emapContext.LICENSERs.SingleOrDefault(x => x.PRGID == programId);
+                    GetLicenseFromPrgIdResponse.UpdateCustomerRequest(ref license, custerRequst);
+                    emapContext.SubmitChanges();
+                }
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                Logger.LogError("UpdateCustormer", e);
+                throw;
+            }
+        }
     }
 }
