@@ -29,7 +29,7 @@ namespace EmapServer.Controllers
         {
             var programId = Request.Query["programid"].FirstOrDefault();
             var computerId = Request.Query["computerid"].FirstOrDefault();
-            var resp = new GetLicenseFromPrgIdResponse { LicenseResponse = LicenseResponse.LicenseNotFound };
+            var resp = new GetLicenseFromPrgIdResponse();
 
             try
             {
@@ -50,16 +50,17 @@ namespace EmapServer.Controllers
                 throw;
             }
         }
-        
+      
         [HttpPost("AddComputerFromId")]
         public IActionResult AddComputerFromId()
         {
             var programId = Request.Query["programid"].FirstOrDefault();
             var computerId = Request.Query["computerid"].FirstOrDefault();
+            var resp = new GetLicenseFromPrgIdResponse();
             try
             {
                 Logger.LogInformation($"AddComputerFromId called with id: {programId} {computerId}");
-                var resp = new GetLicenseFromPrgIdResponse { LicenseResponse = LicenseResponse.LicenseNotFound };
+               
 
                 if (!string.IsNullOrEmpty(programId) && !string.IsNullOrEmpty(computerId))
                 {
