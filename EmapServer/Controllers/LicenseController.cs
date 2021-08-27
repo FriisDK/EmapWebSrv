@@ -19,6 +19,7 @@ namespace EmapServer.Controllers
     {
 
         private ILogger Logger { get; }
+
         public LicenseController(ILogger<LicenseController> logger)
         {
             Logger = logger;
@@ -41,7 +42,7 @@ namespace EmapServer.Controllers
                     var licens = emapContext.LICENSERs.SingleOrDefault(x => x.PRGID == programId);
                     resp = new GetLicenseFromPrgIdResponse(licens, computerId);
                 }
-                
+
                 return Ok(resp);
             }
             catch (Exception e)
@@ -50,8 +51,8 @@ namespace EmapServer.Controllers
                 throw;
             }
         }
-      
-        [HttpPost("AddComputerFromId")]
+
+        [HttpGet("AddComputerFromId")]
         public IActionResult AddComputerFromId()
         {
             var programId = Request.Query["programid"].FirstOrDefault();
@@ -60,7 +61,7 @@ namespace EmapServer.Controllers
             try
             {
                 Logger.LogInformation($"AddComputerFromId called with id: {programId} {computerId}");
-               
+
 
                 if (!string.IsNullOrEmpty(programId) && !string.IsNullOrEmpty(computerId))
                 {
@@ -83,6 +84,7 @@ namespace EmapServer.Controllers
 
                     resp = new GetLicenseFromPrgIdResponse(license, computerId);
                 }
+
                 return Ok(resp);
             }
             catch (Exception e)
@@ -92,25 +94,85 @@ namespace EmapServer.Controllers
             }
         }
 
-        [HttpPost("UpdateCustomer")]
-        public IActionResult UpdateCustomer()   
+        [HttpGet("RemoveComputerFromId")]
+        public IActionResult RemoveComputerFromId()
         {
             var programId = Request.Query["programid"].FirstOrDefault();
-
+            var computerId = Request.Query["computerid"].FirstOrDefault();
+            var resp = new GetLicenseFromPrgIdResponse();
             try
             {
-                Logger.LogInformation($"UpdateCustormer called with id: {programId}");
-                if (!string.IsNullOrEmpty(programId))
+
+                if (!string.IsNullOrEmpty(programId) && !string.IsNullOrEmpty(computerId))
                 {
-                    var custerRequst = this.GetRequestBody<UpdateCustomerRequest>();
                     var emapContext = new EMAPDataContext(DatabaseGlobalization.GetConnection().ConnectionString);
                     var license = emapContext.LICENSERs.SingleOrDefault(x => x.PRGID == programId);
-                    GetLicenseFromPrgIdResponse.UpdateCustomerRequest(ref license, custerRequst);
-                    emapContext.SubmitChanges();
+
+                    if (license != null)
+                    {
+                        if (license.CPUID1 == computerId)
+                            license.CPUID1 = null;
+                        if (license.CPUID2 == computerId)
+                            license.CPUID2 = null;
+                        if (license.CPUID3 == computerId)
+                            license.CPUID3 = null;
+
+                        emapContext.SubmitChanges();
+                    }
+                }
+                
+                return Ok(resp);
+            }
+            catch (Exception e)
+            {
+                Logger.LogError("AddComputerFromId", e);
+                throw;
+            }
+        }
+
+
+        [HttpGet("UpdateCustomer")]
+        public IActionResult UpdateCustomer()
+        {
+            var programId = Request.Query["programid"].FirstOrDefault();
+            var customerName = Request.Query["customername"].FirstOrDefault();
+            var customerAddress = Request.Query["customeraddress"].FirstOrDefault();
+            var customerAddress1 = Request.Query["customeraddress1"].FirstOrDefault();
+            var customerZipcode = Request.Query["customerzipcode"].FirstOrDefault();
+            var customerCity = Request.Query["customercity"].FirstOrDefault();
+            var customerCountry = Request.Query["customercountry"].FirstOrDefault();
+            var customerEmailaddress = Request.Query["Customeremailaddress"].FirstOrDefault();
+
+            var resp = new GetLicenseFromPrgIdResponse();
+            try
+            {
+                Logger.LogInformation($"UpdateCustomer called with id: {programId}");
+                if (!string.IsNullOrEmpty(programId))
+                {
+                    var emapContext = new EMAPDataContext(DatabaseGlobalization.GetConnection().ConnectionString);
+                    var license = emapContext.LICENSERs.SingleOrDefault(x => x.PRGID == programId);
+
+                    if (license != null)
+                    {
+                        license.CUSTNAME = customerName;
+                        license.CUSTADD = customerAddress;
+                        license.CUSTADD1 = customerAddress1;
+                        license.CUSTZIP = customerZipcode;
+                        license.CUSTCITY = customerCity;
+                        license.CUSTCOUNTRY = customerCountry;
+                        license.CUSTEMAIL = customerEmailaddress;
+
+                        emapContext.SubmitChanges();
+                    }
+
+                    resp = new GetLicenseFromPrgIdResponse(license, programId);
+
                 }
 
-                return Ok();
+                return Ok(resp);
+
             }
+
             catch (Exception e)
             {
                 Logger.LogError("UpdateCustormer", e);

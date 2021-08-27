@@ -23,9 +23,14 @@ namespace EmapServer.Models
     public class GetLicenseFromPrgIdResponse
     {
         public LicenseResponse LicenseResponse { get; set; }
-        public ComputerIdStatus ComputerId1 { get; set; }
-        public ComputerIdStatus ComputerId2 { get; set; }
-        public ComputerIdStatus ComputerId3 { get; set; }
+        public ComputerIdStatus ComputerId1State { get; set; }
+        public ComputerIdStatus ComputerId2State { get; set; }
+        public ComputerIdStatus ComputerId3State { get; set; }
+
+        public string ComputerId1 { get; set; }
+        public string ComputerId2 { get; set; }
+        public string ComputerId3 { get; set; }
+        
         public string CustomerName  { get; set; }
         public string CustomerAddress  { get; set; }
         public string CustomerAddress1  { get; set; }
@@ -63,7 +68,7 @@ namespace EmapServer.Models
             license.CUSTEMAIL = updRequst.CustomerEmailAddress;
         }
 
-        public GetLicenseFromPrgIdResponse(EMAPContext.LICENSER licens, string callingComputerId)
+        public GetLicenseFromPrgIdResponse(LICENSER licens, string callingComputerId)
         {
             if (licens == null)
             {
@@ -74,33 +79,33 @@ namespace EmapServer.Models
                 LicenseResponse = LicenseResponse.LicenseFound;
                 if (string.IsNullOrEmpty(licens.CPUID1))
                 {
-                    ComputerId1 = ComputerIdStatus.Free;
+                    ComputerId1State = ComputerIdStatus.Free;
                 }
                 else
                 {
-                    ComputerId1 = licens.CPUID1 == callingComputerId
+                    ComputerId1State = licens.CPUID1 == callingComputerId
                         ? ComputerIdStatus.Current
                         : ComputerIdStatus.IsUse;
                 }
 
                 if (string.IsNullOrEmpty(licens.CPUID2))
                 {
-                    ComputerId2 = ComputerIdStatus.Free;
+                    ComputerId2State = ComputerIdStatus.Free;
                 }
                 else
                 {
-                    ComputerId2 = licens.CPUID2 == callingComputerId
+                    ComputerId2State = licens.CPUID2 == callingComputerId
                         ? ComputerIdStatus.Current
                         : ComputerIdStatus.IsUse;
                 }
 
                 if (string.IsNullOrEmpty(licens.CPUID3))
                 {
-                    ComputerId3 = ComputerIdStatus.Free;
+                    ComputerId3State = ComputerIdStatus.Free;
                 }
                 else
                 {
-                    ComputerId3 = licens.CPUID3 == callingComputerId
+                    ComputerId3State = licens.CPUID3 == callingComputerId
                         ? ComputerIdStatus.Current
                         : ComputerIdStatus.IsUse;
                 }
@@ -112,6 +117,12 @@ namespace EmapServer.Models
                 CustomerCity = licens.CUSTCITY;
                 CustomerCountry = licens.CUSTCOUNTRY;
                 CustomerEmailAddress = licens.CUSTEMAIL;
+
+                ComputerId1 = licens.CPUID1;
+                ComputerId2 = licens.CPUID2;
+                ComputerId3 = licens.CPUID3;
+
+
             }
         }
     }
