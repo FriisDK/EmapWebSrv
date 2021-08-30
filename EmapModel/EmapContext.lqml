@@ -19,7 +19,12 @@
   </Table>
   <Table Name="EMAP.LYRIC" Member="LYRICs">
     <Type Name="LYRIC" ed:Guid="7b7f99c5-dc0f-43d1-a101-369a63462ffd">
-      <Column Name="UNIQUE_ID" Member="UNIQUEID" Type="System.Decimal" DbType="NUMBER NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="fafe428a-1afe-4c0a-8cb9-eefe8d812010" />
+      <Column Name="UNIQUE_ID" Member="UNIQUEID" Type="System.Int32" AutoSync="OnInsert" DbType="NUMBER NULL" IsPrimaryKey="true" CanBeNull="false" UpdateCheck="Always" ed:ValidateRequired="true" ed:Guid="fafe428a-1afe-4c0a-8cb9-eefe8d812010">
+        <Generator Name="Sequence">
+          <GeneratorParameter Name="Sequence" Value="lyric#unique_id" />
+          <GeneratorParameter Name="IsDbGenerated" Value="True" />
+        </Generator>
+      </Column>
       <Column Name="TITLE" Type="System.String" DbType="VARCHAR2(1000 CHAR) NULL" CanBeNull="true" UpdateCheck="Never" MaxLength="1000" ed:ValidateMaxLength="1000" ed:ValidateRequired="false" ed:Guid="8e55d6f9-701a-4eba-bcd9-7829c7389053" />
       <Column Name="LYRIC" Member="LYRIC1" Type="System.String" DbType="CLOB NULL" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="844d5fb6-6d54-41e2-86e3-d42a0839f636" />
     </Type>
