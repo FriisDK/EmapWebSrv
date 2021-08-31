@@ -48,9 +48,6 @@ namespace EmapServer.Controllers
         [HttpPost("SaveNewTitle")]
         public IActionResult SaveNewTitle([FromBody] SaveLyricsModel lyricModel)
         {
-            /*var stream = new StreamReader(Request.Body);
-            var body =  stream.ReadToEnd();
-            var lyricModel = JsonSerializer.Deserialize<SaveLyricsModel>(body);*/
             if (lyricModel == null) return Ok();
             var emapContext = new EMAPDataContext(DatabaseGlobalization.GetConnection().ConnectionString);
             var newLyric = new LYRIC
@@ -63,5 +60,24 @@ namespace EmapServer.Controllers
 
             return Ok(newLyric.UNIQUEID);
         }
+
+        [HttpPost("UpdateTitle")]
+        public IActionResult UpdateTitle([FromBody] UpdateLyricsModel updateLyricsModel)
+        {
+            if (updateLyricsModel == null) return Ok();
+            
+            var emapContext = new EMAPDataContext(DatabaseGlobalization.GetConnection().ConnectionString);
+            var currec = emapContext.LYRICs.FirstOrDefault(x => x.UNIQUEID.ToString() == updateLyricsModel.TitleId.ToString());
+
+            if (currec == null) return Ok();
+            
+            currec.LYRIC1 = updateLyricsModel.Lyric;
+            currec.TITLE = updateLyricsModel.Title;
+
+            emapContext.SubmitChanges();
+
+            return Ok();
+        }
+
     }
 }
