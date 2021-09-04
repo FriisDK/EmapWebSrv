@@ -62,19 +62,31 @@ namespace EmapServer.Controllers
         }
 
         [HttpPost("UpdateTitle")]
-        public IActionResult UpdateTitle([FromBody] UpdateLyricsModel updateLyricsModel)
+        public async Task<IActionResult> UpdateTitle()
         {
-            if (updateLyricsModel == null) return Ok();
-            
-            var emapContext = new EMAPDataContext(DatabaseGlobalization.GetConnection().ConnectionString);
-            var currec = emapContext.LYRICs.FirstOrDefault(x => x.UNIQUEID.ToString() == updateLyricsModel.TitleId.ToString());
+            try
+            {
 
-            if (currec == null) return Ok();
-            
-            currec.LYRIC1 = updateLyricsModel.Lyric;
-            currec.TITLE = updateLyricsModel.Title;
+                var updateLyricsModel = await JsonSerializer.DeserializeAsync<UpdateLyricsModel>(Request.Body);
+                if (updateLyricsModel == null) return Ok();
 
-            emapContext.SubmitChanges();
+                var emapContext = new EMAPDataContext(DatabaseGlobalization.GetConnection().ConnectionString);
+                var currec =
+                    emapContext.LYRICs.FirstOrDefault(
+                        x => x.UNIQUEID.ToString() == updateLyricsModel.TitleId.ToString());
+
+                if (currec == null) return Ok();
+
+                currec.LYRIC1 = updateLyricsModel.Lyric;
+                currec.TITLE = updateLyricsModel.Title;
+
+                emapContext.SubmitChanges();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
 
             return Ok();
         }
