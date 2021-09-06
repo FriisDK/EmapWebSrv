@@ -10,5 +10,6 @@ namespace EmapServer.Models
         public int TitleId { get; set; }
         public string Title { get; set; }
         public string Lyric { get; set; }
+        public string Artist { get; set; }
     }
 }
