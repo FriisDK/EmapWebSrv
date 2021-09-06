@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 
 namespace EmapServer
 {
@@ -23,6 +24,7 @@ namespace EmapServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            
             services.AddSwaggerGen();
         }
 
@@ -48,7 +50,11 @@ namespace EmapServer
 
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "LyricsApi");
+                #if DEBUG
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "LyricsApi");
+                #else
+                    c.SwaggerEndpoint("/rest/swagger/v1/swagger.json", "LyricsApi");
+                #endif
                 c.RoutePrefix = string.Empty;
             });
 
