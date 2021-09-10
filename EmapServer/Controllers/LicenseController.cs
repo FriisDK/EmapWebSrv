@@ -24,17 +24,21 @@ namespace EmapServer.Controllers
         {
             var programId = Request.Query["programid"].FirstOrDefault();
             var computerId = Request.Query["computerid"].FirstOrDefault();
-            var resp = new GetLicenseFromPrgIdResponse();
 
             try
             {
                 Logger.LogInformation($"GetLicenseFromPrgId called with id: {programId} computer {computerId}");
-
-                if (!string.IsNullOrEmpty(programId) && !string.IsNullOrEmpty(computerId))
+                
+                GetLicenseFromPrgIdResponse resp;
+                if (!string.IsNullOrEmpty(programId) )
                 {
                     var emapContext = new EMAPDataContext(DatabaseGlobalization.GetConnection().ConnectionString);
                     var licens = emapContext.LICENSERs.SingleOrDefault(x => x.PRGID == programId);
                     resp = new GetLicenseFromPrgIdResponse(licens, computerId);
+                } else
+                {
+                    resp = new();
+                    resp.LicenseResponse = LicenseResponse.LicenseNotFound;
                 }
 
                 return Ok(resp);
