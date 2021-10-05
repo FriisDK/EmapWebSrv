@@ -41,6 +41,7 @@ namespace EmapServer.Controllers
                     resp.LicenseResponse = LicenseResponse.LicenseNotFound;
                 }
 
+
                 return Ok(resp);
             }
             catch (Exception e)
